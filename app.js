@@ -8,6 +8,8 @@ connectDB();
 
 app.use(express.json());
 app.use(responseWatcher);
+// For API Docss
+app.use('/docs', express.static('docs'));
 app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.get('/api', beforeMiddleware, (req, res) => {

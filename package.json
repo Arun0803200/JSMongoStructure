@@ -5,15 +5,18 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "node generate-apidoc-config.js && apidoc -i controllers/ -o docs/ && nodemon server.js",
+    "docs": "apidoc -i controllers/ -o docs/"
   },
   "keywords": [],
   "author": "Arun",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "apidoc": "^1.2.0",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
+    "fs": "^0.0.1-security",
     "mongoose": "^8.17.0",
     "multer": "^2.0.2",
     "nodemon": "^3.1.10"
