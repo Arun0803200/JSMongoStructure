@@ -1,6 +1,21 @@
 const AdminRole = require('../models/AdminRoleModel');
 const { default: mongoose } = require('mongoose');
 
+/**
+ * @api {get} /users Get All Users
+ * @apiName GetUsers
+ * @apiGroup User
+ *
+ * @apiSuccess {Number} id User ID.
+ * @apiSuccess {String} name Name of the User.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *  HTTP/1.1 200 OK
+ *  [
+ *    { "id": 1, "name": "Arun" },
+ *    { "id": 2, "name": "Muthu" }
+ *  ]
+ */
 exports.createAdminRole = async (req, res) => {
     try {
         const { name, permission } = req.body;
