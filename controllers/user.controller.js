@@ -15,7 +15,7 @@ exports.checkMulterData = async (req, res) => {
 
 exports.createUser = async (req, res) => {
   try {
-    const { 
+    const {
       firstName,
       lastName,
       gender,
@@ -30,7 +30,7 @@ exports.createUser = async (req, res) => {
       formerParty,
       formerRole,
       roleId
-     } = req.body;
+    } = req.body;
     const newUser = new User({ name, email });
     await newUser.save();
     res.status(201).json(newUser);

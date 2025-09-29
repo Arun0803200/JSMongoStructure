@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/user.controller");
+const multer = require('multer');
+const fs = require('fs');
 
 router.get("/", userController.getAllUsers);
 router.post("/", userController.createUser);
@@ -37,8 +39,39 @@ router.delete('/role', deleteRole);
 router.post('/role/multi-delete', deleteMultipleRoles);
 
 module.exports = router;
+const path = require('path');
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/'); // save to "uploads" directory
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname)); // unique name
+    }
+});
+const upload = multer({ storage: storage });
+const XLSX = require('xlsx');
 
-const multer = require('multer');
-const { route } = require("../app");
-const upload = multer();
-router.post('/', upload.single)
+router.post('/upload', upload.single('file'), (req, res) => {
+    try {
+        // Multer will give file path in req.file
+        const filePath = req.file.path;
+
+        // Read Excel file
+        const workbook = XLSX.readFile(filePath);
+
+        // Take the first sheet name
+        const sheetName = workbook.SheetNames[0];
+
+        // Convert sheet to JSON
+        const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+        // delete the uploaded file
+        fs.unlinkSync(filePath);
+
+        res.json({ success: true, data: jsonData });
+    } catch (err) {
+        console.log(err);
+
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
